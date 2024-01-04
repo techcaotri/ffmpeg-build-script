@@ -4,7 +4,7 @@
 # LICENSE: https://github.com/markus-perl/ffmpeg-build-script/blob/master/LICENSE
 
 PROGNAME=$(basename "$0")
-FFMPEG_VERSION=6.0
+FFMPEG_VERSION=6.0.1
 SCRIPT_VERSION=1.48
 CWD=$(pwd)
 PACKAGES="$CWD/packages"
@@ -12,7 +12,7 @@ WORKSPACE="$CWD/workspace"
 CFLAGS="-I$WORKSPACE/include"
 LDFLAGS="-L$WORKSPACE/lib"
 LDEXEFLAGS=""
-EXTRALIBS="-ldl -lpthread -lm -lz"
+EXTRALIBS="-ldl -lpthread -lfdk-aac -lfreetype -lm -lz -static-libgcc -static-libstdc++"
 MACOS_M1=false
 CONFIGURE_OPTIONS=()
 NONFREE_AND_GPL=false
@@ -357,7 +357,7 @@ fi
 
 if build "zlib" "1.2.13"; then
   download "https://github.com/madler/zlib/releases/download/v$CURRENT_PACKAGE_VERSION/zlib-$CURRENT_PACKAGE_VERSION.tar.gz"
-  execute ./configure --static --prefix="${WORKSPACE}"
+  CFLAGS="-fPIC -O3" ./configure --static --prefix="${WORKSPACE}"
   execute make -j $MJOBS
   execute make install
   build_done "zlib" $CURRENT_PACKAGE_VERSION
@@ -506,6 +506,7 @@ if command_exists "cargo"; then
       execute cargo install --version "0.9.20+cargo-0.71" cargo-c
       download "https://github.com/xiph/rav1e/archive/refs/tags/v$CURRENT_PACKAGE_VERSION.tar.gz"
       execute cargo cinstall --prefix="${WORKSPACE}" --library-type=staticlib --crt-static --release
+      sed -i 's/-lgcc_s//g' "${WORKSPACE}/lib/pkgconfig/rav1e.pc"
       build_done "rav1e" $CURRENT_PACKAGE_VERSION
     fi
     CONFIGURE_OPTIONS+=("--enable-librav1e")
@@ -571,6 +572,8 @@ EOF
     if [ -n "$LDEXEFLAGS" ]; then
       sed -i.backup 's/-lgcc_s/-lgcc_eh/g' "${WORKSPACE}/lib/pkgconfig/x265.pc" # The -i.backup is intended and required on MacOS: https://stackoverflow.com/questions/5694228/sed-in-place-flag-that-works-both-on-mac-bsd-and-linux
     fi
+
+    sed -i 's/-lgcc_s//g' "${WORKSPACE}/lib/pkgconfig/x265.pc"
 
     build_done "x265" $CURRENT_PACKAGE_VERSION
   fi
@@ -811,7 +814,7 @@ fi
 
 if build "libtiff" "4.5.0"; then
   download "https://download.osgeo.org/libtiff/tiff-$CURRENT_PACKAGE_VERSION.tar.xz"
-  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static --disable-dependency-tracking --disable-lzma --disable-webp --disable-zstd --without-x
+  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static --disable-dependency-tracking --disable-lzma --disable-webp --disable-zstd --without-x --disable-docs 
   execute make -j $MJOBS
   execute make install
   build_done "libtiff" $CURRENT_PACKAGE_VERSION
@@ -854,6 +857,15 @@ if build "libsdl" "2.28.5"; then
   execute make install
 
   build_done "libsdl" $CURRENT_PACKAGE_VERSION
+fi
+
+if build "harfbuzz" "8.0.0"; then
+  download "https://github.com/harfbuzz/harfbuzz/releases/download/$CURRENT_PACKAGE_VERSION/harfbuzz-$CURRENT_PACKAGE_VERSION.tar.xz"
+  echo "./configure --prefix="${WORKSPACE}" --disable-shared --enable-static"
+  PKG_CONFIG_PATH="${WORKSPACE}"/lib/pkgconfig ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static 
+  make -j $MJOBS
+  make install
+  build_done "harfbuzz" $CURRENT_PACKAGE_VERSION
 fi
 
 if build "FreeType2" "2.11.1"; then
@@ -966,12 +978,15 @@ if [ -d "$CWD/.git" ]; then
   # if build fails below, .git will remain in the wrong place...
 fi
 
-build "ffmpeg" "$FFMPEG_VERSION"
-download "https://github.com/FFmpeg/FFmpeg/archive/refs/heads/release/$FFMPEG_VERSION.tar.gz" "FFmpeg-release-$FFMPEG_VERSION.tar.gz"
+build "ffmpeg" "$FFMPEG_VERSION" 
+download "https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n$FFMPEG_VERSION.tar.gz" "FFmpeg-release-$FFMPEG_VERSION.tar.gz"
 # shellcheck disable=SC2086
+echo "./configure \"${CONFIGURE_OPTIONS[@]}\" --disable-debug --disable-shared --enable-pthreads --enable-static --enable-version3 --extra-cflags=\"${CFLAGS}\" --extra-ldexeflags=\"${LDEXEFLAGS}\" --extra-ldflags=\"${LDFLAGS}\" --extra-libs=\"${EXTRALIBS}\" --pkgconfigdir=\"$WORKSPACE/lib/pkgconfig\" --pkg-config-flags=\"--static\" --prefix=\"${WORKSPACE}\" --extra-version=\"${EXTRA_VERSION}\" "
+
 ./configure "${CONFIGURE_OPTIONS[@]}" \
   --disable-debug \
   --disable-shared \
+  --enable-vaapi \
   --enable-pthreads \
   --enable-static \
   --enable-version3 \
@@ -984,8 +999,8 @@ download "https://github.com/FFmpeg/FFmpeg/archive/refs/heads/release/$FFMPEG_VE
   --prefix="${WORKSPACE}" \
   --extra-version="${EXTRA_VERSION}"
 
-execute make -j $MJOBS
-execute make install
+make -j $MJOBS
+make install
 
 if [ -d "$CWD/.git.bak" ]; then
   mv "$CWD/.git.bak" "$CWD/.git"
