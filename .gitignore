@@ -4,3 +4,5 @@ workspace
 linux
 .artifacts
 build
+.ccls-cache
+*.log
