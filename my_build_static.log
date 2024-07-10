@@ -1,0 +1,212 @@
+ffmpeg-build-script v1.48
+=========================
+
+Using 12 make jobs simultaneously.
+With GPL and non-free codecs
+Start the build in full static mode.
+
+building giflib - version 5.2.1
+=======================
+giflib version 5.2.1 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/giflib.done lockfile to rebuild it.
+
+building pkg-config - version 0.29.2
+=======================
+pkg-config version 0.29.2 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/pkg-config.done lockfile to rebuild it.
+
+building yasm - version 1.3.0
+=======================
+yasm version 1.3.0 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/yasm.done lockfile to rebuild it.
+
+building nasm - version 2.16.01
+=======================
+nasm version 2.16.01 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/nasm.done lockfile to rebuild it.
+
+building zlib - version 1.2.13
+=======================
+zlib version 1.2.13 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/zlib.done lockfile to rebuild it.
+
+building m4 - version 1.4.19
+=======================
+m4 version 1.4.19 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/m4.done lockfile to rebuild it.
+
+building autoconf - version 2.71
+=======================
+autoconf version 2.71 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/autoconf.done lockfile to rebuild it.
+
+building automake - version 1.16.5
+=======================
+automake version 1.16.5 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/automake.done lockfile to rebuild it.
+
+building libtool - version 2.4.7
+=======================
+libtool version 2.4.7 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/libtool.done lockfile to rebuild it.
+
+building openssl - version 1.1.1w
+=======================
+openssl version 1.1.1w already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/openssl.done lockfile to rebuild it.
+
+building cmake - version 3.27.7
+=======================
+cmake version 3.27.7 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/cmake.done lockfile to rebuild it.
+$ pip3 install pip setuptools --quiet --upgrade --no-cache-dir --disable-pip-version-check
+
+building dav1d - version 1.1.0
+=======================
+dav1d version 1.1.0 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/dav1d.done lockfile to rebuild it.
+
+building svtav1 - version 1.7.0
+=======================
+svtav1 version 1.7.0 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/svtav1.done lockfile to rebuild it.
+
+building rav1e - version 0.6.6
+=======================
+rav1e version 0.6.6 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/rav1e.done lockfile to rebuild it.
+
+building x264 - version 941cae6d
+=======================
+x264 version 941cae6d already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/x264.done lockfile to rebuild it.
+
+building x265 - version 3.5
+=======================
+x265 version 3.5 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/x265.done lockfile to rebuild it.
+
+building libvpx - version 1.13.1
+=======================
+libvpx version 1.13.1 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/libvpx.done lockfile to rebuild it.
+
+building xvidcore - version 1.3.7
+=======================
+xvidcore version 1.3.7 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/xvidcore.done lockfile to rebuild it.
+
+building vid_stab - version 1.1.1
+=======================
+vid_stab version 1.1.1 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/vid_stab.done lockfile to rebuild it.
+
+building av1 - version 7b5f665
+=======================
+av1 version 7b5f665 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/av1.done lockfile to rebuild it.
+
+building zimg - version 3.0.5
+=======================
+zimg version 3.0.5 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/zimg.done lockfile to rebuild it.
+
+building lv2 - version 1.18.10
+=======================
+lv2 version 1.18.10 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/lv2.done lockfile to rebuild it.
+
+building waflib - version b600c92
+=======================
+waflib version b600c92 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/waflib.done lockfile to rebuild it.
+
+building serd - version 0.30.16
+=======================
+serd version 0.30.16 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/serd.done lockfile to rebuild it.
+
+building pcre - version 8.45
+=======================
+pcre version 8.45 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/pcre.done lockfile to rebuild it.
+
+building sord - version 0.16.14
+=======================
+sord version 0.16.14 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/sord.done lockfile to rebuild it.
+
+building sratom - version 0.6.14
+=======================
+sratom version 0.6.14 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/sratom.done lockfile to rebuild it.
+
+building lilv - version 0.24.20
+=======================
+lilv version 0.24.20 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/lilv.done lockfile to rebuild it.
+
+building opencore - version 0.1.6
+=======================
+opencore version 0.1.6 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/opencore.done lockfile to rebuild it.
+
+building lame - version 3.100
+=======================
+lame version 3.100 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/lame.done lockfile to rebuild it.
+
+building opus - version 1.4
+=======================
+opus version 1.4 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/opus.done lockfile to rebuild it.
+
+building libogg - version 1.3.5
+=======================
+libogg version 1.3.5 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/libogg.done lockfile to rebuild it.
+
+building libvorbis - version 1.3.7
+=======================
+libvorbis version 1.3.7 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/libvorbis.done lockfile to rebuild it.
+
+building libtheora - version 1.1.1
+=======================
+libtheora version 1.1.1 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/libtheora.done lockfile to rebuild it.
+
+building fdk_aac - version 2.0.2
+=======================
+fdk_aac version 2.0.2 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/fdk_aac.done lockfile to rebuild it.
+
+building libtiff - version 4.5.0
+=======================
+libtiff version 4.5.0 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/libtiff.done lockfile to rebuild it.
+
+building libpng - version 1.6.39
+=======================
+libpng version 1.6.39 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/libpng.done lockfile to rebuild it.
+
+building libwebp - version 1.2.2
+=======================
+libwebp version 1.2.2 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/libwebp.done lockfile to rebuild it.
+
+building libsdl - version 2.28.5
+=======================
+libsdl version 2.28.5 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/libsdl.done lockfile to rebuild it.
+
+building harfbuzz - version 8.0.0
+=======================
+harfbuzz version 8.0.0 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/harfbuzz.done lockfile to rebuild it.
+
+building FreeType2 - version 2.11.1
+=======================
+FreeType2 version 2.11.1 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/FreeType2.done lockfile to rebuild it.
+
+building srt - version 1.5.3
+=======================
+srt version 1.5.3 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/srt.done lockfile to rebuild it.
+
+building libzmq - version 4.3.1
+=======================
+libzmq version 4.3.1 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/libzmq.done lockfile to rebuild it.
+Linux detected
+
+building amf - version 1.4.30
+=======================
+amf version 1.4.30 already built. Remove /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/packages/amf.done lockfile to rebuild it.
+
+Temporarily moving .git dir to .git.bak to workaround ffmpeg build bug
+
+building ffmpeg - version 6.0.1
+=======================
+FFmpeg-release-6.0.1.tar.gz has already downloaded.
+Extracted FFmpeg-release-6.0.1.tar.gz
+PKG_CONFIG_PATH=/home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/workspace/lib/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig/ ./configure --enable-nonfree --enable-gpl --enable-openssl --enable-libdav1d --enable-libsvtav1 --enable-librav1e --enable-libx264 --enable-libx265 --enable-libvpx --enable-libxvid --enable-libvidstab --enable-libaom --enable-libzimg --enable-lv2 --enable-libopencore_amrnb --enable-libopencore_amrwb --enable-libmp3lame --enable-libopus --enable-libvorbis --enable-libtheora --enable-libfdk-aac --enable-libwebp --enable-libfreetype --enable-libsrt --disable-ffnvcodec --enable-amf --disable-debug --enable-shared --enable-pthreads --disable-static --enable-version3 --enable-libfdk-aac --extra-cflags=-I/home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/workspace/include -I/home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/workspace/include/lilv-0 --verbose --extra-ldexeflags=-static --extra-ldflags=-L/home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/workspace/lib -L/usr/lib/x86_64-linux-gnu --verbose --extra-libs=-ldl -lpthread -lfdk-aac -lfreetype -lharfbuzz -lm -lz --pkg-config-flags=--static --prefix=/home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/workspace --extra-version= 
+ERROR: vidstab >= 0.98 not found using pkg-config
+
+If you think configure made a mistake, make sure you are using the latest
+version from Git.  If the latest version fails, report the problem to the
+ffmpeg-user@ffmpeg.org mailing list or IRC #ffmpeg on irc.libera.chat.
+Include the log file "ffbuild/config.log" produced by configure as this will help
+solve the problem.
+Makefile:184: /tests/Makefile: No such file or directory
+make: *** No rule to make target '/tests/Makefile'.  Stop.
+Makefile:184: /tests/Makefile: No such file or directory
+make: *** No rule to make target '/tests/Makefile'.  Stop.
+
+Successfully built binary for linux-gnu: ELF 64-bit LSB pie executable, x86-64, version 1 (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2, for GNU/Linux 3.2.0, BuildID[sha1]=d4751891d51ab0d83bae04bfdc537ed86e90d88c, stripped
+
+Building done. The following binaries can be found here:
+- ffmpeg: /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/workspace/bin/ffmpeg
+- ffprobe: /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/workspace/bin/ffprobe
+- ffplay: /home/tripham/Dev/Playground_FFMPEG/ffmpeg-build-script/workspace/bin/ffplay
+
+Install these binaries to your /home/tripham/.local folder? Existing binaries will be replaced. [Y/n] 

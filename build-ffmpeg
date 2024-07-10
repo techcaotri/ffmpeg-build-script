@@ -10,9 +10,9 @@ CWD=$(pwd)
 PACKAGES="$CWD/packages"
 WORKSPACE="$CWD/workspace"
 CFLAGS="-I$WORKSPACE/include"
-LDFLAGS="-L$WORKSPACE/lib"
+LDFLAGS="-L$WORKSPACE/lib -L/usr/lib/x86_64-linux-gnu"
 LDEXEFLAGS=""
-EXTRALIBS="-ldl -lpthread -lfdk-aac -lfreetype -lm -lz -static-libgcc -static-libstdc++"
+EXTRALIBS="-ldl -lpthread -lfdk-aac -lfreetype -lharfbuzz -lm -lz"
 MACOS_M1=false
 CONFIGURE_OPTIONS=()
 NONFREE_AND_GPL=false
@@ -490,7 +490,7 @@ if build "svtav1" "1.7.0"; then
   # Last known working commit which passed CI Tests from HEAD branch
   download "https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v$CURRENT_PACKAGE_VERSION/SVT-AV1-v$CURRENT_PACKAGE_VERSION.tar.gz" "svtav1-$CURRENT_PACKAGE_VERSION.tar.gz"
   cd "${PACKAGES}"/svtav1-$CURRENT_PACKAGE_VERSION//Build/linux || exit
-  execute cmake -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DENABLE_SHARED=off -DBUILD_SHARED_LIBS=OFF ../.. -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release
+  cmake -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DENABLE_SHARED=off -DBUILD_SHARED_LIBS=OFF ../.. -G"Unix Makefiles" -DCMAKE_BUILD_TYPE=Release -DCMAKE_POSITION_INDEPENDENT_CODE=ON
   execute make -j $MJOBS
   execute make install
   execute cp SvtAv1Enc.pc "${WORKSPACE}/lib/pkgconfig/"
@@ -589,8 +589,8 @@ if build "libvpx" "1.13.1"; then
     sed "s/-Wl,--no-undefined -Wl,-soname/-Wl,-undefined,error -Wl,-install_name/g" build/make/Makefile.patched >build/make/Makefile
   fi
 
-  execute ./configure --prefix="${WORKSPACE}" --disable-unit-tests --disable-shared --disable-examples --as=yasm --enable-vp9-highbitdepth
-  execute make -j $MJOBS
+  ./configure --prefix="${WORKSPACE}" --disable-unit-tests --disable-shared --disable-examples --as=yasm --enable-vp9-highbitdepth --enable-pic
+  make -j $MJOBS VERBOSE=1
   execute make install
 
   build_done "libvpx" $CURRENT_PACKAGE_VERSION
@@ -601,7 +601,7 @@ if $NONFREE_AND_GPL; then
   if build "xvidcore" "1.3.7"; then
     download "https://downloads.xvid.com/downloads/xvidcore-$CURRENT_PACKAGE_VERSION.tar.gz"
     cd build/generic || exit
-    execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static
+    execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static --enable-pic CFLAGS="-fPIC ${CFLAGS}" CXXFLAGS="-fPIC ${CXXFLAGS}"
     execute make -j $MJOBS
     execute make install
 
@@ -627,7 +627,7 @@ if $NONFREE_AND_GPL; then
       patch -p1 <fix_cmake_quoting.patch
     fi
 
-    execute cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DUSE_OMP=OFF -DENABLE_SHARED=off .
+    execute cmake -DBUILD_SHARED_LIBS=OFF -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DUSE_OMP=OFF -DENABLE_SHARED=off -DCMAKE_POSITION_INDEPENDENT_CODE=ON .
     execute make
     execute make install
 
@@ -644,7 +644,7 @@ if build "av1" "7b5f665"; then
   if $MACOS_M1; then
     execute cmake -DENABLE_TESTS=0 -DENABLE_EXAMPLES=0 -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DCMAKE_INSTALL_LIBDIR=lib -DCONFIG_RUNTIME_CPU_DETECT=0 "$PACKAGES"/av1
   else
-    execute cmake -DENABLE_TESTS=0 -DENABLE_EXAMPLES=0 -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DCMAKE_INSTALL_LIBDIR=lib "$PACKAGES"/av1
+    execute cmake -DENABLE_TESTS=0 -DENABLE_EXAMPLES=0 -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DCMAKE_INSTALL_LIBDIR=lib "$PACKAGES"/av1 -DCMAKE_POSITION_INDEPENDENT_CODE=ON
   fi
   execute make -j $MJOBS
   execute make install
@@ -658,7 +658,7 @@ if build "zimg" "3.0.5"; then
   cd zimg-release-$CURRENT_PACKAGE_VERSION || exit
   execute "${WORKSPACE}/bin/libtoolize" -i -f -q
   execute ./autogen.sh --prefix="${WORKSPACE}"
-  execute ./configure --prefix="${WORKSPACE}" --enable-static --disable-shared
+  ./configure --prefix="${WORKSPACE}" --enable-static --disable-shared --enable-pic CFLAGS="-fPIC ${CFLAGS}" CXXFLAGS="-fPIC ${CXXFLAGS}"
   execute make -j $MJOBS
   execute make install
   build_done "zimg" $CURRENT_PACKAGE_VERSION
@@ -728,7 +728,7 @@ fi
 
 if build "opencore" "0.1.6"; then
   download "https://deac-ams.dl.sourceforge.net/project/opencore-amr/opencore-amr/opencore-amr-$CURRENT_PACKAGE_VERSION.tar.gz" "opencore-amr-$CURRENT_PACKAGE_VERSION.tar.gz"
-  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static
+  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static --enable-pic CFLAGS="-fPIC ${CFLAGS}" CXXFLAGS="-fPIC ${CXXFLAGS}"
   execute make -j $MJOBS
   execute make install
 
@@ -738,7 +738,7 @@ CONFIGURE_OPTIONS+=("--enable-libopencore_amrnb" "--enable-libopencore_amrwb")
 
 if build "lame" "3.100"; then
   download "https://sourceforge.net/projects/lame/files/lame/$CURRENT_PACKAGE_VERSION/lame-$CURRENT_PACKAGE_VERSION.tar.gz/download?use_mirror=gigenet" "lame-$CURRENT_PACKAGE_VERSION.tar.gz"
-  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static
+  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static --enable-pic CFLAGS="-fPIC ${CFLAGS}" CXXFLAGS="-fPIC ${CXXFLAGS}"
   execute make -j $MJOBS
   execute make install
 
@@ -748,7 +748,7 @@ CONFIGURE_OPTIONS+=("--enable-libmp3lame")
 
 if build "opus" "1.4"; then
   download "https://downloads.xiph.org/releases/opus/opus-$CURRENT_PACKAGE_VERSION.tar.gz"
-  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static
+  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static --enable-pic CFLAGS="-fPIC ${CFLAGS}" CXXFLAGS="-fPIC ${CXXFLAGS}"
   execute make -j $MJOBS
   execute make install
 
@@ -766,7 +766,7 @@ fi
 
 if build "libvorbis" "1.3.7"; then
   download "https://ftp.osuosl.org/pub/xiph/releases/vorbis/libvorbis-$CURRENT_PACKAGE_VERSION.tar.gz"
-  execute ./configure --prefix="${WORKSPACE}" --with-ogg-libraries="${WORKSPACE}"/lib --with-ogg-includes="${WORKSPACE}"/include/ --enable-static --disable-shared --disable-oggtest
+  execute ./configure --prefix="${WORKSPACE}" --with-ogg-libraries="${WORKSPACE}"/lib --with-ogg-includes="${WORKSPACE}"/include/ --enable-static --disable-shared --disable-oggtest --enable-pic CFLAGS="-fPIC ${CFLAGS}" CXXFLAGS="-fPIC ${CXXFLAGS}"
   execute make -j $MJOBS
   execute make install
 
@@ -788,7 +788,7 @@ if build "libtheora" "1.1.1"; then
     ##END OF CONFIG.GUESS PATCH
   fi
 
-  execute ./configure --prefix="${WORKSPACE}" --with-ogg-libraries="${WORKSPACE}"/lib --with-ogg-includes="${WORKSPACE}"/include/ --with-vorbis-libraries="${WORKSPACE}"/lib --with-vorbis-includes="${WORKSPACE}"/include/ --enable-static --disable-shared --disable-oggtest --disable-vorbistest --disable-examples --disable-asm --disable-spec
+  execute ./configure --prefix="${WORKSPACE}" --with-ogg-libraries="${WORKSPACE}"/lib --with-ogg-includes="${WORKSPACE}"/include/ --with-vorbis-libraries="${WORKSPACE}"/lib --with-vorbis-includes="${WORKSPACE}"/include/ --enable-static --disable-shared --disable-oggtest --disable-vorbistest --disable-examples --disable-asm --disable-spec --enable-pic CFLAGS="-fPIC ${CFLAGS}" CXXFLAGS="-fPIC ${CXXFLAGS}"
   execute make -j $MJOBS
   execute make install
 
@@ -799,8 +799,8 @@ CONFIGURE_OPTIONS+=("--enable-libtheora")
 if $NONFREE_AND_GPL; then
   if build "fdk_aac" "2.0.2"; then
     download "https://sourceforge.net/projects/opencore-amr/files/fdk-aac/fdk-aac-$CURRENT_PACKAGE_VERSION.tar.gz/download?use_mirror=gigenet" "fdk-aac-$CURRENT_PACKAGE_VERSION.tar.gz"
-    execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static --enable-pic
-    execute make -j $MJOBS
+    ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static --enable-pic  CFLAGS="-fPIC ${CFLAGS}" CXXFLAGS="-fPIC ${CXXFLAGS}"
+    make -j $MJOBS V=1
     execute make install
 
     build_done "fdk_aac" $CURRENT_PACKAGE_VERSION
@@ -823,7 +823,7 @@ if build "libpng" "1.6.39"; then
   download "https://gigenet.dl.sourceforge.net/project/libpng/libpng16/$CURRENT_PACKAGE_VERSION/libpng-$CURRENT_PACKAGE_VERSION.tar.gz" "libpng-$CURRENT_PACKAGE_VERSION.tar.gz"
   export LDFLAGS="${LDFLAGS}"
   export CPPFLAGS="${CFLAGS}"
-  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static
+  ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static --enable-pic CFLAGS="-fPIC ${CFLAGS}" CXXFLAGS="-fPIC ${CXXFLAGS}"
   execute make -j $MJOBS
   execute make install
   build_done "libpng" $CURRENT_PACKAGE_VERSION
@@ -835,11 +835,11 @@ if [[ "$OSTYPE" != "darwin"* ]]; then
     # libwebp can fail to compile on Ubuntu if these flags were left set to CFLAGS
     CPPFLAGS=
     download "https://storage.googleapis.com/downloads.webmproject.org/releases/webp/libwebp-$CURRENT_PACKAGE_VERSION.tar.gz" "libwebp-$CURRENT_PACKAGE_VERSION.tar.gz"
-    execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static --disable-dependency-tracking --disable-gl --with-zlib-include="${WORKSPACE}"/include/ --with-zlib-lib="${WORKSPACE}"/lib
+    execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static --disable-dependency-tracking --disable-gl --with-zlib-include="${WORKSPACE}"/include/ --with-zlib-lib="${WORKSPACE}"/lib --enable-pic CFLAGS="-fPIC ${CFLAGS}" CXXFLAGS="-fPIC ${CXXFLAGS}"
     make_dir build
     cd build || exit
-    execute cmake -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_BINDIR=bin -DCMAKE_INSTALL_INCLUDEDIR=include -DENABLE_SHARED=OFF -DENABLE_STATIC=ON ../
-    execute make -j $MJOBS
+    cmake -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_BINDIR=bin -DCMAKE_INSTALL_INCLUDEDIR=include -DENABLE_SHARED=OFF -DENABLE_STATIC=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON ../
+    make -j $MJOBS VERBOSE=1
     execute make install
 
     build_done "libwebp" $CURRENT_PACKAGE_VERSION
@@ -852,7 +852,7 @@ fi
 
 if build "libsdl" "2.28.5"; then
   download "https://github.com/libsdl-org/SDL/releases/download/release-$CURRENT_PACKAGE_VERSION/SDL2-$CURRENT_PACKAGE_VERSION.tar.gz"
-  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static
+  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static --enable-pic CFLAGS="-fPIC ${CFLAGS}" CXXFLAGS="-fPIC ${CXXFLAGS}"
   execute make -j $MJOBS
   execute make install
 
@@ -862,7 +862,7 @@ fi
 if build "harfbuzz" "8.0.0"; then
   download "https://github.com/harfbuzz/harfbuzz/releases/download/$CURRENT_PACKAGE_VERSION/harfbuzz-$CURRENT_PACKAGE_VERSION.tar.xz"
   echo "./configure --prefix="${WORKSPACE}" --disable-shared --enable-static"
-  PKG_CONFIG_PATH="${WORKSPACE}"/lib/pkgconfig ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static 
+  PKG_CONFIG_PATH="${WORKSPACE}"/lib/pkgconfig ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static  --enable-pic CFLAGS="-fPIC ${CFLAGS}" CXXFLAGS="-fPIC ${CXXFLAGS}"
   make -j $MJOBS
   make install
   build_done "harfbuzz" $CURRENT_PACKAGE_VERSION
@@ -870,7 +870,7 @@ fi
 
 if build "FreeType2" "2.11.1"; then
   download "https://downloads.sourceforge.net/freetype/freetype-$CURRENT_PACKAGE_VERSION.tar.xz"
-  execute ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static
+  PKG_CONFIG_PATH="${WORKSPACE}"/lib/pkgconfig ./configure --prefix="${WORKSPACE}" --disable-shared --enable-static
   execute make -j $MJOBS
   execute make install
   build_done "FreeType2" $CURRENT_PACKAGE_VERSION
@@ -884,7 +884,7 @@ if $NONFREE_AND_GPL; then
     export OPENSSL_ROOT_DIR="${WORKSPACE}"
     export OPENSSL_LIB_DIR="${WORKSPACE}"/lib
     export OPENSSL_INCLUDE_DIR="${WORKSPACE}"/include/
-    execute cmake . -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_BINDIR=bin -DCMAKE_INSTALL_INCLUDEDIR=include -DENABLE_SHARED=OFF -DENABLE_STATIC=ON -DENABLE_APPS=OFF -DUSE_STATIC_LIBSTDCXX=ON
+    cmake . -DCMAKE_INSTALL_PREFIX="${WORKSPACE}" -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_BINDIR=bin -DCMAKE_INSTALL_INCLUDEDIR=include -DENABLE_SHARED=OFF -DENABLE_STATIC=ON -DENABLE_APPS=OFF -DUSE_STATIC_LIBSTDCXX=ON -DCMAKE_POSITION_INDEPENDENT_CODE=ON
     execute make install
 
     if [ -n "$LDEXEFLAGS" ]; then
@@ -917,7 +917,9 @@ fi
 ##
 
 if [[ "$OSTYPE" == "linux-gnu" ]]; then
+  echo "Linux detected"
   if command_exists "nvcc"; then
+    echo "nvcc detected" 
     if build "nv-codec" "11.1.5.3"; then
       download "https://github.com/FFmpeg/nv-codec-headers/releases/download/n$CURRENT_PACKAGE_VERSION/nv-codec-headers-$CURRENT_PACKAGE_VERSION.tar.gz"
       execute make PREFIX="${WORKSPACE}"
@@ -981,25 +983,26 @@ fi
 build "ffmpeg" "$FFMPEG_VERSION" 
 download "https://github.com/FFmpeg/FFmpeg/archive/refs/tags/n$FFMPEG_VERSION.tar.gz" "FFmpeg-release-$FFMPEG_VERSION.tar.gz"
 # shellcheck disable=SC2086
-echo "./configure \"${CONFIGURE_OPTIONS[@]}\" --disable-debug --disable-shared --enable-pthreads --enable-static --enable-version3 --extra-cflags=\"${CFLAGS}\" --extra-ldexeflags=\"${LDEXEFLAGS}\" --extra-ldflags=\"${LDFLAGS}\" --extra-libs=\"${EXTRALIBS}\" --pkgconfigdir=\"$WORKSPACE/lib/pkgconfig\" --pkg-config-flags=\"--static\" --prefix=\"${WORKSPACE}\" --extra-version=\"${EXTRA_VERSION}\" "
+echo ./configure "${CONFIGURE_OPTIONS[@]}" --disable-debug --enable-shared --enable-pthreads --disable-static --enable-version3 --enable-libfdk-aac --extra-cflags="${CFLAGS} --verbose" --extra-ldexeflags="${LDEXEFLAGS}" --extra-ldflags="${LDFLAGS} --verbose" --extra-libs="${EXTRALIBS}" --pkg-config-flags="--static" --prefix="/usr/local/" --extra-version="${EXTRA_VERSION}" 
 
+# PKG_CONFIG_PATH="${WORKSPACE}"/lib/pkgconfig:/usr/lib/x86_64-linux-gnu/pkgconfig/ PATH=/usr/local/cuda-11/bin:$PATH ./configure "${CONFIGURE_OPTIONS[@]}" \
+echo "PKG_CONFIG_PATH=$PKG_CONFIG_PATH"
 ./configure "${CONFIGURE_OPTIONS[@]}" \
   --disable-debug \
   --disable-shared \
-  --enable-vaapi \
   --enable-pthreads \
   --enable-static \
   --enable-version3 \
+  --enable-libfdk-aac \
   --extra-cflags="${CFLAGS}" \
   --extra-ldexeflags="${LDEXEFLAGS}" \
   --extra-ldflags="${LDFLAGS}" \
   --extra-libs="${EXTRALIBS}" \
-  --pkgconfigdir="$WORKSPACE/lib/pkgconfig" \
   --pkg-config-flags="--static" \
-  --prefix="${WORKSPACE}" \
+  --prefix="/usr/local/" \
   --extra-version="${EXTRA_VERSION}"
 
-make -j $MJOBS
+LIBRARY_PATH="${WORKSPACE}"/lib make -j $MJOBS V=1
 make install
 
 if [ -d "$CWD/.git.bak" ]; then
